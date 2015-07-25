@@ -92,8 +92,6 @@ d3.csv('twitter-name.json', function (data) {
     });
     dateChart.yAxis().ticks(5);
 
-    console.log(dateChart.colors());
-
     hourChart.width(420)
       .height(180)
       .margins({top: 10, right: 50, bottom: 30, left: 40})
