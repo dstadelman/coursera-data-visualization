@@ -60,11 +60,11 @@ d3.csv('twitter-name.json', function (data) {
       var suffix;
       if (hour > 12) {
         hour = hour - 12;
-        suffix = (short) ? 'a' : 'am';
+        suffix = (short) ? 'p' : 'pm';
       } else {
         if (hour === 0)
           hour = 12;
-        suffix = (short) ? 'p' : 'pm';
+        suffix = (short) ? 'a' : 'am';
       }
       return hour + minutes + suffix;
     };
