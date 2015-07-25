@@ -6,16 +6,18 @@
 
 var dateChart = dc.barChart('#date-chart');
 var hourChart = dc.barChart('#hour-chart');
+//var countChart = dc.pieChart('#count-chart');
+var countChart = dc.rowChart('#count-chart');
 
 d3.csv('twitter-name.json', function (data) {
 
-    var formatDate = d3.time.format("%a %b %e %H:%M:%S %Z %Y")
+    var formatDate = d3.time.format("%a %b %e %H:%M:%S %Z %Y");
 
     data.forEach(function (d) {
         d.dd = formatDate.parse(d.date);
         d.day = d3.time.day(d.dd); // pre-calculate day for better performance
         d.hour = d3.time.hour(d.dd); // pre-calculate day for better performance
-        d.TWITTER_NAME = d.TWITTER_NAME;
+        d.item = d.TWITTER_NAME;
     });
 
     var ndx = crossfilter(data);
@@ -29,55 +31,16 @@ d3.csv('twitter-name.json', function (data) {
     var dimensionHour = ndx.dimension(function(d) { return d.dd.getHours() + d.dd.getMinutes() / 60; });
     var groupHour = dimensionHour.group(Math.floor);
 
-    /*
     // dimension by year
-    var yearlyDimension = ndx.dimension(function (d) {
-        return d3.time.year(d.dd).getFullYear();
-    });
-    // maintain running tallies by year as filters are applied or removed
-    var yearlyPerformanceGroup = yearlyDimension.group().reduce(
-        // callback for when data is added to the current filter results
-        function (p, v) {
-            ++p.count;
-            p.absGain += v.close - v.open;
-            p.fluctuation += Math.abs(v.close - v.open);
-            p.sumIndex += (v.open + v.close) / 2;
-            p.avgIndex = p.sumIndex / p.count;
-            p.percentageGain = (p.absGain / p.avgIndex) * 100;
-            p.fluctuationPercentage = (p.fluctuation / p.avgIndex) * 100;
-            return p;
-        },
-        // callback for when data is removed from the current filter results
-        function (p, v) {
-            --p.count;
-            p.absGain -= v.close - v.open;
-            p.fluctuation -= Math.abs(v.close - v.open);
-            p.sumIndex -= (v.open + v.close) / 2;
-            p.avgIndex = p.sumIndex / p.count;
-            p.percentageGain = (p.absGain / p.avgIndex) * 100;
-            p.fluctuationPercentage = (p.fluctuation / p.avgIndex) * 100;
-            return p;
-        },
-        // initialize p
-        function () {
-            return {
-                count: 0,
-                absGain: 0,
-                fluctuation: 0,
-                fluctuationPercentage: 0,
-                sumIndex: 0,
-                avgIndex: 0,
-                percentageGain: 0
-            };
-        }
-    );
+    var dimensionItem = ndx.dimension(function (d) { return d.item; });
+    var groupItem = dimensionItem.group();
 
-    var yearlyPerformanceGroupFiltered = {
-      top: function (k) {
-          return yearlyPerformanceGroup.top(k).filter(function(d) { return d.value.absGain > 0; });
+    var groupItemTopK = {
+      all: function() {
+        var k = 25;
+        return groupItem.top(k);
       }
     };
-    */
 
     var oneDay = 24*60*60*1000;
 
@@ -90,6 +53,21 @@ d3.csv('twitter-name.json', function (data) {
     dayDataEnd.setHours(23);
     dayDataEnd.setMinutes(59);
     dayDataEnd.setMilliseconds(999);
+
+    var convertFrom24h = function(hour_, minutes_, short) {
+      var hour = +hour_;
+      var minutes = (minutes_ !== undefined) ? ':' + minutes_ : '';
+      var suffix;
+      if (hour > 12) {
+        hour = hour - 12;
+        suffix = (short) ? 'a' : 'am';
+      } else {
+        if (hour === 0)
+          hour = 12;
+        suffix = (short) ? 'p' : 'pm';
+      }
+      return hour + minutes + suffix;
+    };
 
     dateChart.width(420)
       .height(180)
@@ -110,9 +88,11 @@ d3.csv('twitter-name.json', function (data) {
 
     // Customize axis
     dateChart.xAxis().tickFormat(function (v) {
-      return v.getDate();
+      return (v.getMonth() + 1) + '/' + v.getDate();
     });
     dateChart.yAxis().ticks(5);
+
+    console.log(dateChart.colors());
 
     hourChart.width(420)
       .height(180)
@@ -130,26 +110,32 @@ d3.csv('twitter-name.json', function (data) {
       .x(d3.scale.linear().domain([0, 24]))
       .renderHorizontalGridLines(true)
       .filterPrinter(function (filters) {
-          var filters = filters[0];
-          var labels = [];
-          for (var i = 0; i < filters.length; i++) {
-            if (filters[i] > 12)
-              labels[i] = filters[i] - 12 + ':00pm';
-            else {
-              labels[i] = filters[i];
-              if (filters[i] == 0)
-                labels[i] = 12;
-              labels[i] = labels[i] + ':00am';
-            }
-          }
-          return labels[0] + ' -> ' + labels[1];
+          return convertFrom24h(filters[0][0]) + ' -> ' + convertFrom24h(filters[0][1]);
       });
 
     // Customize axis
     hourChart.xAxis().tickFormat(function (v) {
-      return v;
+      return convertFrom24h(v, undefined, true);
     });
     hourChart.yAxis().ticks(5);
+
+    countChart.width(960)
+        .height(500)
+        .margins({top: 20, left: 10, right: 10, bottom: 20})
+        .group(groupItemTopK)
+        .dimension(dimensionItem)
+        // assign colors to each value in the x scale domain
+        .ordinalColors(['#1f77b4'])
+        .label(function (d) {
+            return d.key;
+        })
+        // title sets the row text
+        .title(function (d) {
+            return d.value;
+        })
+        //.colors(colorbrewer.RdBu[9])
+        .elasticX(true)
+        .xAxis().ticks(4);
 
     dc.dataCount('.dc-data-count')
         .dimension(ndx)
