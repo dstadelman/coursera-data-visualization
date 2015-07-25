@@ -31,7 +31,7 @@
 
   <p>
     The coordinated visualizations below (built with <a href="https://github.com/dc-js/dc.js">dc.js</a> using <a href="http://d3js.org/">D3</a>)
-    show the top 10,000 most mentioned <a href="http://twitter.com">Twitter</a> user names mentioned
+    show the top 10,000 most mentioned <a href="http://twitter.com">Twitter</a> names mentioned
     in sample of 100,000 english tweets sampled from Fri May 15 06:59:49 +0000 2015 to Fri May 22 14:29:45 +0000 2015 off of
     the <a href="https://dev.twitter.com/streaming/reference/get/statuses/sample">Twitter Sample Stream</a>.
   </p>
@@ -40,6 +40,8 @@
     How popular is <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();countChart.filter('@potus');dc.redrawAll();">the president</a>
     compared to <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();countChart.filter('@harry_styles');countChart.filter('@real_liam_payne');countChart.filter('@louis_tomlinson');countChart.filter('@niallofficial');dc.redrawAll();">members of boy band One Direction</a>?
     Did <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();countChart.filter('@taylorswift13');dc.redrawAll();">Taylor Swift</a> do something interesting during the week(<a href='https://www.youtube.com/watch?v=QcIy9NiNbmo'>.</a>)?
+    What <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();dateChart.filter([new Date(2015, 4, 17), new Date(2015, 4, 18)]);dateChart.dimension().filter([new Date(2015, 4, 17), new Date(2015, 4, 18)]);dc.redrawAll();">event</a> was held on May 17(<a href="https://en.wikipedia.org/wiki/2015_Billboard_Music_Awards">.</a>)?
+    There are also interesting differences between Twitter names mentioned <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();hourChart.filter([8, 17]);hourChart.dimension().filter([8, 17]);dc.redrawAll();">during the day</a> than in the <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();hourChart.filter([0, 4]);hourChart.dimension().filter([1, 4]);dc.redrawAll();">wee hours of the morning</a>.
   </p>
 
   <p>
