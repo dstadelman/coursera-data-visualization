@@ -6,7 +6,6 @@
 
 var dateChart = dc.barChart('#date-chart');
 var hourChart = dc.barChart('#hour-chart');
-//var countChart = dc.pieChart('#count-chart');
 var countChart = dc.rowChart('#count-chart');
 
 d3.csv('twitter-name.json', function (data) {
