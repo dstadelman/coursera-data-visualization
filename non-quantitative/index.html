@@ -6,17 +6,20 @@
     <meta charset="UTF-8">
 
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/dc.css"/>
 
     <style>
-        #monthly-volume-chart g.y {
-            display: none;
+        .node {
+          stroke: #55acee;
+          stroke-width: 1.5px;
+          fill: #55acee;
         }
-        #logo {
-            margin-right: 2em;
-            margin-top: 2em;
+        .link {
+          stroke: #999;
+          stroke-opacity: .6;
+          stroke-width: 1.5px;
         }
     </style>
+
 </head>
 <body>
 
@@ -30,18 +33,10 @@
   </p>
 
   <p>
-    The coordinated visualizations below (built with <a href="https://github.com/dc-js/dc.js">dc.js</a> using <a href="http://d3js.org/">D3</a>)
-    show the top 10,000 <a href="http://twitter.com">Twitter</a> names mentioned in a sample of 100,000
-    English tweets sampled off of the <a href="https://dev.twitter.com/streaming/reference/get/statuses/sample">Twitter Sample Stream</a>
-    from Fri May 15 06:59:49 +0000 2015 to Fri May 22 14:29:45 +0000 2015.
-  </p>
-
-  <p>
-    How popular is <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();countChart.filter('@potus');dc.redrawAll();">the president</a>
-    compared to <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();countChart.filter('@harry_styles');countChart.filter('@real_liam_payne');countChart.filter('@louis_tomlinson');countChart.filter('@niallofficial');dc.redrawAll();">members of boy band One Direction</a>?
-    Did <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();countChart.filter('@taylorswift13');dc.redrawAll();">Taylor Swift</a> do something interesting during the week(<a href='https://www.youtube.com/watch?v=QcIy9NiNbmo'>.</a>)?
-    What <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();dateChart.filter([new Date(2015, 4, 17), new Date(2015, 4, 18)]);dateChart.dimension().filter([new Date(2015, 4, 17), new Date(2015, 4, 18)]);dc.redrawAll();">event</a> was held on May 17(<a href="https://en.wikipedia.org/wiki/2015_Billboard_Music_Awards">.</a>)?
-    There are also interesting differences between Twitter names mentioned <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();hourChart.filter([8, 17]);hourChart.dimension().filter([8, 17]);dc.redrawAll();">during the day</a> than in the <a href="javascript:dateChart.filterAll();hourChart.filterAll();countChart.filterAll();hourChart.filter([0, 4]);hourChart.dimension().filter([1, 4]);dc.redrawAll();">wee hours of the morning</a>.
+    The visualization (built with <a href="http://d3js.org/">D3</a>) below shows the closest XXXXXX tweets
+    by cosine distance from a sample of 100,000 English tweets sampled off of the
+    <a href="https://dev.twitter.com/streaming/reference/get/statuses/sample">Twitter Sample Stream</a> from
+    Fri May 15 06:59:49 +0000 2015 to Fri May 22 14:29:45 +0000 2015.
   </p>
 
   <p>
@@ -51,45 +46,18 @@
 </div>
 
 <div class="row">
-  <h2>Top 10,000 Most Mentioned Twitter Names <small>From 100,000 Sample Tweets</small></h2>
+  <h2>Closest XXXXXX Tweets By Cosine Distance <small>From 100,000 Sample Tweets</small></h2>
 </div>
 
 <div class="row">
-  <div id="date-chart">
-    <strong>Mentions by Date</strong>
-    <span class="reset" style="display: none;">range: <span class="filter"></span></span>
-    <a class="reset" href="javascript:dateChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+  <div id="node-chart">
     <div class="clearfix"></div>
   </div>
-  <div id="hour-chart">
-    <strong>Mentions by Hour of Day</strong>
-    <span class="reset" style="display: none;">range: <span class="filter"></span></span>
-    <a class="reset" href="javascript:hourChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-    <div class="clearfix"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div id="count-chart">
-    <strong>Top 25 Twitter Mentions</strong>
-    <span class="reset" style="display: none;">range: <span class="filter"></span></span>
-    <a class="reset" href="javascript:countChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-    <div class="clearfix"></div>
-  </div>
-</div>
-
-<div class="row">
-  <div>
-    <p class="dc-data-count text-right">
-      <span class="filter-count"></span> selected out of <span class="total-count"></span> records | <a
-        href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
-    </p>
-  </div>
-</div>
-
-<div class="row">
-  <table class="table table-hover dc-data-table">
-  </table>
+  <p>
+    Hovering the mouse over a node will show the text of the tweet.<br/>
+    Edges represent the consine distance of the tweets.<br/>
+    Node size represents the number of times a duplicate tweet was seen in the sample.
+  </p>
 </div>
 
 <div class="clearfix"></div>
@@ -100,11 +68,9 @@
 </div>
 
 <script type="text/javascript" src="../js/d3.js"></script>
-<script type="text/javascript" src="../js/crossfilter.js"></script>
-<script type="text/javascript" src="../js/dc.js"></script>
 <script type="text/javascript" src="../js/colorbrewer.js"></script>
 
-<script type="text/javascript" src="quantitative.js"></script>
+<script type="text/javascript" src="non-quantitative.js"></script>
 
 </body>
 </html>
