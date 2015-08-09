@@ -1,7 +1,7 @@
 'use strict';
 
 /* jshint globalstrict: true */
-/* global d3,colorbrewer */
+/* global $,colorbrewer,d3 */
 
 var width = 960,
     height = 500;
@@ -15,8 +15,23 @@ var svg = d3.select("#node-chart").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("twitter-nn.json", function(error, graph) {
+d3.json("twitter-nn.json-", function(error, graph) {
   if (error) throw error;
+
+  var countProperties = function(obj) {
+    var count = 0;
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            ++count;
+    }
+    return count;
+  };
+
+  var elements = $('.nTweets');
+  for (var i = 0; i < elements.length; i++) {
+    var element = elements[i];
+    element.innerHTML = countProperties(graph.nodes);
+  }
 
   // Compute the distinct nodes from the links.
   graph.links.forEach(function(link) {
@@ -68,8 +83,14 @@ d3.json("twitter-nn.json", function(error, graph) {
       .attr("y2", function(d) { return d.target.y; });
 
     node
-      .attr("cx", function(d) { return d.x = Math.max(r, Math.min(width - r,  d.x)); })
-      .attr("cy", function(d) { return d.y = Math.max(r, Math.min(height - r, d.y)); });
+      .attr("cx", function(d) {
+        d.x = Math.max(r, Math.min(width - r,  d.x));
+        return d.x;
+      })
+      .attr("cy", function(d) {
+        d.y = Math.max(r, Math.min(height - r, d.y));
+        return d.y;
+      });
   });
 
 });
