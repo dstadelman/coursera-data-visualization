@@ -1,7 +1,7 @@
 'use strict';
 
 /* jshint globalstrict: true */
-/* global $,colorbrewer,d3 */
+/* global $,colorbrewer,d3,he */
 
 var width = 960,
     height = 500;
@@ -71,7 +71,7 @@ d3.json("twitter-nn.json-", function(error, graph) {
   var labels = node.append("title")
     .attr("x", 12)
     .attr("dy", ".35em")
-    .text(function(d) { return d.title; })
+    .text(function(d) { return he.decode(d.title); })
     .style("visibility", "hidden");
 
   var r = 6;
